@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw, Eye, ExternalLink } from "lucide-react";
+import { PUBLIC_FILE_URL } from "@/lib/api";
 
 import {
     Select,
@@ -331,7 +332,15 @@ export default function DashboardPage() {
                                                                     <Label className="text-right text-gray-500">สลิปโอนเงิน</Label>
                                                                     <span className="col-span-3 text-sm text-green-600 break-all">
                                                                         {selectedOrder?.slip_url ? (
-                                                                            <a href={selectedOrder.slip_url} target="_blank" rel="noreferrer" className="underline inline-flex items-center">
+                                                                            <a 
+                                                                                // ตรวจสอบว่าถ้าเป็น URL เต็มอยู่แล้วให้ใช้เลย ถ้าไม่ให้ต่อ Prefix
+                                                                                href={selectedOrder.slip_url.startsWith('http') 
+                                                                                    ? selectedOrder.slip_url 
+                                                                                    : `${PUBLIC_FILE_URL}/${selectedOrder.slip_url}`} 
+                                                                                target="_blank" 
+                                                                                rel="noreferrer" 
+                                                                                className="underline inline-flex items-center"
+                                                                            >
                                                                                 ดูสลิป <ExternalLink className="ml-1 w-3 h-3" />
                                                                             </a>
                                                                         ) : <span className="text-gray-400">ยังไม่ได้อัปโหลด</span>}

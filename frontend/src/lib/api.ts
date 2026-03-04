@@ -1,1 +1,2 @@
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://vinyl-backend-yu8t.onrender.com";
+export const PUBLIC_FILE_URL = process.env.NEXT_PUBLIC_FILE_URL_PREFIX || "https://pub-95243df558784b059bd71a0c5720caaf.r2.dev";
