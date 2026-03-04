@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>บริการพิมพ์ไวนิล by ไผ่อวบหรอ</title>
+    <meta name="description" content="บริการพิมพ์ไวนิลครบวงจร คำนวณราคาอัตโนมัติ สั่งงานออนไลน์ และติดตามสถานะได้ทันที">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon"><i data-lucide="printer"></i></div>
+                <span>ไผ่อวบหรอ<span class="gradient-text"
+                        style="background: none; -webkit-text-fill-color: initial; color: var(--primary);">พิมพ์ไวนิล</span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#portfolio">ผลงาน</a></li>
+                <li><a href="#calculator">คำนวณราคา</a></li>
+                <li><a href="#tracking">ติดตามสถานะ</a></li>
+                <li><button class="btn btn-primary" onclick="openOrderModal()">สั่งงานใหม่</button></li>
+                <li id="nav-login"><button class="btn btn-outline" onclick="openAuthModal()"><i data-lucide="log-in"
+                            style="width:18px;"></i> เข้าสู่ระบบ</button></li>
+                <li id="nav-profile" class="hidden"><button class="btn btn-outline" onclick="openProfile()"><i
+                            data-lucide="user" style="width:18px;"></i> <span
+                            id="user-display-name">คุณ...</span></button></li>
+                <li id="nav-logout" class="hidden"><button class="btn btn-outline" style="border:none; padding:10px;"
+                        onclick="logout()"><i data-lucide="log-out" style="width:18px;"></i></button></li>
+            </ul>
+            <div class="mobile-menu-btn">
+                <i data-lucide="menu"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container grid-2">
+            <div class="hero-content animate__animated animate__fadeInLeft">
+                <div class="badge">🔥 บริการพิมพ์ไวนิล 24 ชั่วโมง</div>
+                <h1 class="gradient-text">งานพิมพ์คุณภาพ<br>สีสดทนทาน<br>โดดเด่นสะดุดตา</h1>
+                <p>ยินดีต้อนรับสู่ <strong>บริการพิมพ์ไวนิล by ไผ่อวบหรอ</strong> บริการพิมพ์ครบวงจร รวดเร็ว แม่นยำ
+                    ราคาถูกใจ พร้อมระบบคำนวณราคาและติดตามสถานะแบบเรียลไทม์</p>
+                <div class="hero-btns">
+                    <button class="btn btn-primary btn-lg" onclick="scrollToId('calculator')">คำนวณราคาเลย</button>
+                    <button class="btn btn-secondary btn-lg" onclick="scrollToId('portfolio')">ดูตัวอย่างผลงาน</button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="num">10k+</span>
+                        <span class="label">งานที่ส่งมอบแล้ว</span>
+                    </div>
+                    <div class="stat">
+                        <span class="num">24h</span>
+                        <span class="label">จัดส่งรวดเร็ว</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image animate__animated animate__fadeInRight">
+                <div class="image-stack">
+                    <img src="https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80"
+                        alt="Vinyl Printing" class="main-img">
+                    <div class="badge-card">
+                        <i data-lucide="check-circle" class="success"></i>
+                        <span>งานคุณภาพ HD</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">ดูผลงานของเรา</h2>
+                <p>คัดสรรผลงานคุณภาพที่เราภาคภูมิใจ ส่งมอบให้กับลูกค้าทั่วประเทศ</p>
+            </div>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <img src="https://images.unsplash.com/photo-1572044162444-ad60f128bde7?auto=format&fit=crop&w=600&q=80"
+                        alt="Banner 1">
+                    <div class="item-overlay">
+                        <span>ป้ายแบนเนอร์กิจกรรม</span>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=600&q=80"
+                        alt="Billboard">
+                    <div class="item-overlay">
+                        <span>ป้ายโฆษณาขนาดใหญ่</span>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=600&q=80"
+                        alt="Exhibition">
+                    <div class="item-overlay">
+                        <span>นิทรรศการและบูธ</span>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <img src="https://images.unsplash.com/photo-1619551734325-81aad3dd348b?auto=format&fit=crop&w=600&q=80"
+                        alt="Signage">
+                    <div class="item-overlay">
+                        <span>ป้ายร้านค้าและอาคาร</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculator Section -->
+    <section id="calculator" class="section">
+        <div class="container">
+            <div class="grid-2">
+                <div class="calc-info">
+                    <h2 class="section-title">คำนวณราคาอัตโนมัติ</h2>
+                    <p>ทราบราคาได้ทันที เพียงกรอกขนาดและเลือกวัสดุ แม่นยำ ไม่มีค่าธรรมเนียมแอบแฝง</p>
+                    <ul class="features-list">
+                        <li><i data-lucide="maximize"></i> กำหนดขนาดได้ตามต้องการ</li>
+                        <li><i data-lucide="layers"></i> เลือกความหนาของไวนิลได้</li>
+                        <li><i data-lucide="zap"></i> ราคาสุทธิรวมค่าพิมพ์และเจาะตาไก่</li>
+                    </ul>
+                </div>
+                <div class="calc-card glass-card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>ความกว้าง (เมตร)</label>
+                            <input type="number" id="calc-width" value="1" min="0.1" step="0.1"
+                                oninput="calculatePrice()">
+                        </div>
+                        <div class="form-group">
+                            <label>ความสูง (เมตร)</label>
+                            <input type="number" id="calc-height" value="1" min="0.1" step="0.1"
+                                oninput="calculatePrice()">
+                        </div>
+                        <div class="form-group">
+                            <label>วัสดุ</label>
+                            <select id="calc-material" onchange="calculatePrice()">
+                                <option value="120">Vinyl Standard (360gsm) - 120฿/ตร.ม.</option>
+                                <option value="180">Vinyl Premium (440gsm) - 180฿/ตร.ม.</option>
+                                <option value="250">Vinyl Black Back (กันแสง) - 250฿/ตร.ม.</option>
+                            </select>
+                        </div>
+                        <div class="price-display">
+                            <span class="price-label">ราคาประมาณการ:</span>
+                            <span class="price-value">฿<span id="total-price">120</span></span>
+                        </div>
+                        <button class="btn btn-primary btn-block"
+                            onclick="openOrderModalWithData()">สั่งงานจากขนาดนี้</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tracking Section -->
+    <section id="tracking" class="section bg-dark text-white">
+        <div class="container text-center">
+            <h2 class="section-title">ติดตามสถานะงาน</h2>
+            <p>ตรวจสอบความคืบหน้าของออเดอร์ท่านได้ทันที</p>
+            <div class="search-box">
+                <input type="text" id="track-id" placeholder="กรอกเลขที่ออเดอร์ (เช่น VN-1234)">
+                <button class="btn btn-primary" onclick="trackOrder()">ตรวจสอบ</button>
+            </div>
+            <div id="track-result" class="track-result-container hidden">
+                <!-- Result will be injected here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- User Profile Section -->
+    <section id="profile-section" class="section hidden">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">โปรไฟล์ของฉัน</h2>
+            </div>
+            <div class="grid-2">
+                <div class="glass-card">
+                    <h3>ข้อมูลส่วนตัว</h3>
+                    <form id="profile-form" onsubmit="updateProfile(event)" style="margin-top: 20px;">
+                        <div class="form-group">
+                            <label>ชื่อ-นามสกุล</label>
+                            <input type="text" id="prof-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>เบอร์โทรศัพท์</label>
+                            <input type="tel" id="prof-phone" readonly
+                                style="background-color:#e2e8f0; cursor:not-allowed;">
+                        </div>
+                        <div class="form-group">
+                            <label>ที่อยู่จัดส่ง</label>
+                            <textarea id="prof-address" rows="3"
+                                placeholder="บ้านเลขที่, ถนน, ซอย, จังหวัด, รหัสไปรษณีย์"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">บันทึกข้อมูล</button>
+                    </form>
+                </div>
+                <div class="glass-card table-responsive">
+                    <h3>ประวัติการสั่งงาน</h3>
+                    <table class="admin-table" style="margin-top: 20px;">
+                        <thead>
+                            <tr>
+                                <th>ออเดอร์</th>
+                                <th>รายการ</th>
+                                <th>สถานะ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-history-body">
+                            <!-- User Orders -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="text-center" style="margin-top:20px;" id="staff-dashboard-btn-container">
+                <!-- if staff, show dashboard button here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin View (Hidden by default) -->
+    <section id="admin-panel" class="section hidden">
+        <div class="container">
+            <div class="admin-header">
+                <h2>แผงควบคุมเจ้าหน้าที่ / เจ้าของร้าน</h2>
+                <div class="admin-tabs">
+                    <button class="tab-btn active" onclick="switchAdminTab('orders')">จัดการออเดอร์</button>
+                    <button class="tab-btn" onclick="switchAdminTab('reports')">รายงานยอดขาย</button>
+                </div>
+            </div>
+
+            <div id="admin-orders" class="admin-tab-content">
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ออเดอร์</th>
+                                <th>ลูกค้า</th>
+                                <th>รายการ</th>
+                                <th>สถานะ</th>
+                                <th>ไฟล์</th>
+                                <th>จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-orders-body">
+                            <!-- Orders will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="admin-reports" class="admin-tab-content hidden">
+                <div class="reports-grid">
+                    <div class="chart-card glass-card">
+                        <h3>ยอดขายรายสัปดาห์</h3>
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <h4>ยอดขายเดือนนี้</h4>
+                            <p class="num">฿45,200</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>ออเดอร์รอผลิต</h4>
+                            <p class="num">12</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content glass-card" style="max-width: 450px;">
+            <div class="modal-header">
+                <h3 id="auth-title">เข้าสู่ระบบ</h3>
+                <span class="close" onclick="closeAuthModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="admin-tabs" style="margin-bottom: 20px; display: flex; justify-content: center;">
+                    <button class="tab-btn active" id="tab-login" onclick="switchAuthTab('login')">เข้าสู่ระบบ</button>
+                    <button class="tab-btn" id="tab-register" onclick="switchAuthTab('register')">สมัครสมาชิก</button>
+                </div>
+                <form id="auth-form" onsubmit="handleAuth(event)">
+                    <div id="reg-fields" class="hidden">
+                        <div class="form-group">
+                            <label>ชื่อ-นามสกุล</label>
+                            <input type="text" id="auth-name">
+                        </div>
+                        <div class="form-group">
+                            <label>สถานะผู้ใช้</label>
+                            <select id="auth-role">
+                                <option value="customer">ลูกค้า</option>
+                                <option value="staff">พนักงาน / เจ้าหน้าที่</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>เบอร์โทรศัพท์ (หรือ admin สำหรับพนักงาน)</label>
+                        <input type="text" id="auth-username" required placeholder="08x-xxxxxxx หรือ admin">
+                    </div>
+                    <div class="form-group">
+                        <label>รหัสผ่าน</label>
+                        <input type="password" id="auth-password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block" id="auth-submit-btn">เข้าสู่ระบบ</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div id="order-modal" class="modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3>สั่งงานใหม่</h3>
+                <span class="close" onclick="closeOrderModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="order-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>ชื่อลูกค้า</label>
+                            <input type="text" id="order-name" required placeholder="ชื่อ-นามสกุล">
+                        </div>
+                        <div class="form-group">
+                            <label>เบอร์โทรศัพท์</label>
+                            <input type="tel" id="order-phone" required placeholder="08x-xxxxxxx">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>ขนาด กว้าง x สูง (เมตร)</label>
+                            <div class="input-pair">
+                                <input type="number" id="order-width" step="0.1" required>
+                                <span>x</span>
+                                <input type="number" id="order-height" step="0.1" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>วัสดุ</label>
+                            <select id="order-material">
+                                <option value="standard">Standard</option>
+                                <option value="premium">Premium</option>
+                                <option value="blackback">Black Back</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>อัปโหลดไฟล์งาน (PDF, TIFF, AI, PNG)</label>
+                        <div class="upload-area" id="drop-zone">
+                            <i data-lucide="upload-cloud"></i>
+                            <p>ลากไฟล์มาวาง หรือ <span>คลิกเพื่อเลือกไฟล์</span></p>
+                            <input type="file" id="file-input" hidden>
+                        </div>
+                        <div id="file-info" class="file-info hidden"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">ยืนยันการสั่งงาน</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <p>&copy; 2026 บริการพิมพ์ไวนิล by ไผ่อวบหรอ. สงวนลิขสิทธิ์</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">ออกแบบด้วยความใส่ใจ
+                เพื่อแม่ค้าและลูกค้าทุกคน 🎉</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
