@@ -333,10 +333,18 @@ export default function DashboardPage() {
                                                                     <span className="col-span-3 text-sm text-green-600 break-all">
                                                                         {selectedOrder?.slip_url ? (
                                                                             <a 
-                                                                                // ตรวจสอบว่าถ้าเป็น URL เต็มอยู่แล้วให้ใช้เลย ถ้าไม่ให้ต่อ Prefix
-                                                                                href={selectedOrder.slip_url.startsWith('http') 
-                                                                                    ? selectedOrder.slip_url 
-                                                                                    : `${PUBLIC_FILE_URL}/${selectedOrder.slip_url}`} 
+                                                                                href={
+                                                                                    // 1. ถ้ามีคำว่า localhost ให้ตัดทิ้งแล้วเอาชื่อไฟล์ไปต่อกับ R2 URL
+                                                                                    selectedOrder?.slip_url?.includes('localhost') 
+                                                                                    ? `${PUBLIC_FILE_URL}/${selectedOrder.slip_url.split('/').pop()}`
+                                                                                    
+                                                                                    // 2. ถ้าเป็น URL เต็มอยู่แล้ว (เช่น ออเดอร์ใหม่) ให้ใช้ได้เลย
+                                                                                    : selectedOrder?.slip_url?.startsWith('http')
+                                                                                    ? selectedOrder.slip_url
+                                                                                        
+                                                                                    // 3. ถ้าเป็นแค่ชื่อไฟล์เฉยๆ ให้ต่อกับ R2 URL
+                                                                                    : `${PUBLIC_FILE_URL}/${selectedOrder?.slip_url}`
+                                                                                }
                                                                                 target="_blank" 
                                                                                 rel="noreferrer" 
                                                                                 className="underline inline-flex items-center"
