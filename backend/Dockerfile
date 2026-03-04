@@ -1,5 +1,5 @@
-# Use the full Rust image (based on Debian) to ensure all build tools are available
-FROM rust:1.91 as builder
+# Use the full Rust image (based on Debian 12 Bookworm) to ensure all build tools are available
+FROM rust:1.91-bookworm as builder
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
