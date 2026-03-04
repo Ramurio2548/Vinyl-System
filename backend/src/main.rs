@@ -53,7 +53,7 @@ async fn main() {
     let pool = pool.expect("❌ Failed to connect to database after several retries");
 
     println!("Running database migrations...");
-    sqlx::migrate!("./migrations")
+    sqlx::migrate!()
         .run(&pool)
         .await
         .unwrap_or_else(|err| {

@@ -1,7 +1,7 @@
-# Use the official Rust image as a builder
-FROM rust:1.80-slim as builder
+# Use the full Rust image (based on Debian) to ensure all build tools are available
+FROM rust:1.80 as builder
 
-# Install system dependencies needed for building (e.g., sqlx needs libssl)
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     pkg-config \
     libssl-dev \
@@ -30,7 +30,7 @@ COPY ./backend/migrations ./migrations
 RUN rm -f ./target/release/deps/backend*
 RUN cargo build --release
 
-# Final base image
+# Final base image (keep slim for the runtime)
 FROM debian:bookworm-slim
 
 # Install OpenSSL and other essentials for runtime
