@@ -360,7 +360,7 @@ pub async fn reorder(
     let old_order = sqlx::query_as::<_, OrderRow>(
         r#"
         SELECT 
-            id, customer_id, material_id, width_m, height_m, total_sqm, file_url, slip_url, estimated_price, status, created_at, updated_at
+            id, customer_id, NULL as customer_name, material_id, NULL as material_name, width_m, height_m, total_sqm, file_url, slip_url, estimated_price, status, created_at, updated_at
         FROM orders
         WHERE id = $1 AND customer_id = $2
         "#,
@@ -465,7 +465,7 @@ pub async fn generate_presigned_url(
     // 1. Verify the order belongs to this customer
     let order = sqlx::query_as::<_, OrderRow>(
         r#"
-        SELECT id, customer_id, material_id, width_m, height_m, total_sqm, file_url, slip_url, estimated_price, status, created_at, updated_at
+        SELECT id, customer_id, NULL as customer_name, material_id, NULL as material_name, width_m, height_m, total_sqm, file_url, slip_url, estimated_price, status, created_at, updated_at
         FROM orders
         WHERE id = $1 AND customer_id = $2
         "#,
