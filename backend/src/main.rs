@@ -52,6 +52,11 @@ async fn main() {
 
     let pool = pool.expect("❌ Failed to connect to database after several retries");
 
+    println!("Cleaning up modified migration...");
+    let _ = sqlx::query("DELETE FROM _sqlx_migrations WHERE version = 20260304220000")
+        .execute(&pool)
+        .await;
+
     println!("Running database migrations...");
     sqlx::migrate!()
         .run(&pool)
