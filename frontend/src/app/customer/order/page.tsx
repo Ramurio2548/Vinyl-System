@@ -136,7 +136,8 @@ export default function OrderPage() {
             // 2. If a file is selected, upload it
             if (selectedFile) {
                 // 2.1 Get Presigned URL
-                const urlRes = await fetch(`${API_BASE_URL}/api/orders/${orderId}/presigned-url?filename=${encodeURIComponent(selectedFile.name)}`, {
+                const fileType = encodeURIComponent(selectedFile.type || "application/octet-stream");
+                const urlRes = await fetch(`${API_BASE_URL}/api/orders/${orderId}/presigned-url?filename=${encodeURIComponent(selectedFile.name)}&content_type=${fileType}`, {
                     headers: { "Authorization": `Bearer ${token}` }
                 });
 

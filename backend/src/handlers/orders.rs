@@ -451,6 +451,7 @@ pub struct PresignedUrlResponse {
 #[derive(Deserialize)]
 pub struct PresignedUrlQuery {
     pub filename: Option<String>,
+    pub content_type: Option<String>,
 }
 
 /// GET /api/orders/:id/presigned-url
@@ -500,10 +501,16 @@ pub async fn generate_presigned_url(
             (StatusCode::INTERNAL_SERVER_ERROR, Json(ErrorResponse { error: format!("Failed to configure presigned URL: {}", e) }))
         })?;
 
-    let presigned_req = state.s3
+    let mut put_req = state.s3
         .put_object()
         .bucket(&bucket_name)
-        .key(&object_key)
+        .key(&object_key);
+
+    if let Some(ct) = query.content_type {
+        put_req = put_req.content_type(ct);
+    }
+
+    let presigned_req = put_req
         .presigned(presigned_config)
         .await
         .map_err(|e| {

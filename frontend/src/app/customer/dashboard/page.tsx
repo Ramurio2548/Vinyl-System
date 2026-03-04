@@ -180,11 +180,10 @@ export default function CustomerDashboardPage() {
                 return;
             }
 
-            // 1. Get Presigned URL - Now sending filename to preserve extension
-            const urlRes = await fetch(`${API_BASE_URL}/api/orders/${printFileUploadOrderId}/presigned-url?filename=${encodeURIComponent(printFile.name)}`, {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
+            // 1. Get Presigned URL
+            const fileType = encodeURIComponent(printFile.type || "application/octet-stream");
+            const urlRes = await fetch(`${API_BASE_URL}/api/orders/${printFileUploadOrderId}/presigned-url?filename=${encodeURIComponent(printFile.name)}&content_type=${fileType}`, {
+                headers: { "Authorization": `Bearer ${token}` }
             });
 
             if (!urlRes.ok) {
@@ -278,8 +277,8 @@ export default function CustomerDashboardPage() {
                         key={tab}
                         onClick={() => setActiveTab(tab)}
                         className={`px-6 py-2 rounded-xl text-sm font-bold transition-all ${activeTab === tab
-                                ? "bg-white shadow-sm text-primary"
-                                : "text-muted-foreground hover:text-foreground"
+                            ? "bg-white shadow-sm text-primary"
+                            : "text-muted-foreground hover:text-foreground"
                             }`}
                     >
                         {tab === "All" && "ทั้งหมด"}
