@@ -28,7 +28,7 @@ export default function ShowcasePage() {
 
         const fetchShowcase = async () => {
             try {
-                const res = await fetch(`${API_BASE_URL}/api/showcase");
+                const res = await fetch(`${API_BASE_URL}/api/showcase`);
                 if (res.ok) {
                     const data = await res.json();
                     setItems(data);

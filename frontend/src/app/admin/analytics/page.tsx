@@ -46,7 +46,7 @@ export default function AnalyticsPage() {
             const token = localStorage.getItem("token");
             if (!token) return;
 
-            const res = await fetch(`${API_BASE_URL}/api/admin/analytics/summary", {
+            const res = await fetch(`${API_BASE_URL}/api/admin/analytics/summary`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }

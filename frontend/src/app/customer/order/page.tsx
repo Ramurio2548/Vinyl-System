@@ -58,7 +58,7 @@ export default function OrderPage() {
     useEffect(() => {
         const fetchMaterials = async () => {
             try {
-                const res = await fetch(`${API_BASE_URL}/api/inventory");
+                const res = await fetch(`${API_BASE_URL}/api/inventory`);
                 if (!res.ok) throw new Error("Failed to fetch materials");
                 const data = await res.json();
                 setMaterials(data);
@@ -80,7 +80,7 @@ export default function OrderPage() {
 
             setIsLoading(true);
             try {
-                const res = await fetch(`${API_BASE_URL}/api/calculator", {
+                const res = await fetch(`${API_BASE_URL}/api/calculator`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ width_m, height_m, material_id }),
@@ -115,7 +115,7 @@ export default function OrderPage() {
             const customerId = tokenPayload.sub;
 
             // 1. Create the Order first
-            const res = await fetch(`${API_BASE_URL}/api/orders", {
+            const res = await fetch(`${API_BASE_URL}/api/orders`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

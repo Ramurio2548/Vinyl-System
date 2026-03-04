@@ -42,7 +42,7 @@ export default function AdminShowcasePage() {
         setIsLoading(true);
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`${API_BASE_URL}/api/admin/showcase", {
+            const res = await fetch(`${API_BASE_URL}/api/admin/showcase`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             if (res.ok) {
@@ -65,7 +65,7 @@ export default function AdminShowcasePage() {
         setIsActionLoading(true);
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`${API_BASE_URL}/api/admin/showcase", {
+            const res = await fetch(`${API_BASE_URL}/api/admin/showcase`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -197,7 +197,7 @@ export default function AdminShowcasePage() {
                                                         const uploadFormData = new FormData();
                                                         uploadFormData.append("file", file);
 
-                                                        const res = await fetch(`${API_BASE_URL}/api/admin/showcase/upload", {
+                                                        const res = await fetch(`${API_BASE_URL}/api/admin/showcase/upload`, {
                                                             method: "POST",
                                                             headers: { "Authorization": `Bearer ${token}` },
                                                             body: uploadFormData

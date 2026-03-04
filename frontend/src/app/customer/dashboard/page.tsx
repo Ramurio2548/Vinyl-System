@@ -63,7 +63,7 @@ export default function CustomerDashboardPage() {
                 return;
             }
 
-            const res = await fetch(`${API_BASE_URL}/api/customer/orders", {
+            const res = await fetch(`${API_BASE_URL}/api/customer/orders`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }

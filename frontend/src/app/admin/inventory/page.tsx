@@ -53,7 +53,7 @@ export default function InventoryPage() {
             const token = localStorage.getItem("token");
             if (!token) return;
 
-            const res = await fetch(`${API_BASE_URL}/api/admin/inventory", {
+            const res = await fetch(`${API_BASE_URL}/api/admin/inventory`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }

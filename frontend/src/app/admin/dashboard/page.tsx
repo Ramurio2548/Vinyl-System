@@ -58,7 +58,7 @@ export default function DashboardPage() {
             if (!token) return;
 
             // Fetch Orders
-            const ordersRes = await fetch(`${API_BASE_URL}/api/orders", {
+            const ordersRes = await fetch(`${API_BASE_URL}/api/orders`, {
                 headers: { "Authorization": `Bearer ${token}` }
             });
 

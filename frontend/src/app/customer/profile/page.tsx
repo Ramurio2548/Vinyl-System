@@ -44,7 +44,7 @@ export default function ProfilePage() {
                     window.location.href = "/login";
                     return;
                 }
-                const res = await fetch(`${API_BASE_URL}/api/user/profile", {
+                const res = await fetch(`${API_BASE_URL}/api/user/profile`, {
                     headers: { "Authorization": `Bearer ${token}` },
                 });
                 if (!res.ok) throw new Error("ไม่สามารถโหลดข้อมูลส่วนตัวได้");
@@ -73,7 +73,7 @@ export default function ProfilePage() {
                 window.location.href = "/login";
                 return;
             }
-            const res = await fetch(`${API_BASE_URL}/api/user/profile", {
+            const res = await fetch(`${API_BASE_URL}/api/user/profile`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

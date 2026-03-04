@@ -35,7 +35,7 @@ export default function UsersManagementPage() {
             const token = localStorage.getItem("token");
             if (!token) return;
 
-            const res = await fetch(`${API_BASE_URL}/api/admin/users", {
+            const res = await fetch(`${API_BASE_URL}/api/admin/users`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
