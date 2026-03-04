@@ -1,5 +1,5 @@
 # Use the full Rust image (based on Debian) to ensure all build tools are available
-FROM rust:1.85 as builder
+FROM rust:1.91 as builder
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
