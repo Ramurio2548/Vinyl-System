@@ -15,8 +15,8 @@ pub struct InventoryRow {
     pub base_price_per_sqm: f64,
     pub stock_quantity: f64,
     pub is_active: bool,
-    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
-    pub updated_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub created_at: Option<chrono::NaiveDateTime>,
+    pub updated_at: Option<chrono::NaiveDateTime>,
 }
 
 #[derive(Deserialize)]

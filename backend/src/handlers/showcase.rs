@@ -17,8 +17,8 @@ pub struct ShowcaseItem {
     pub category: Option<String>,
     pub example_price: Option<f64>,
     pub is_visible: bool,
-    pub created_at: Option<DateTime<Utc>>,
-    pub updated_at: Option<DateTime<Utc>>,
+    pub created_at: Option<chrono::NaiveDateTime>,
+    pub updated_at: Option<chrono::NaiveDateTime>,
 }
 
 #[derive(Deserialize)]

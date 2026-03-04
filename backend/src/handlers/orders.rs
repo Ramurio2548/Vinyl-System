@@ -43,8 +43,8 @@ pub struct OrderRow {
     pub slip_url: Option<String>,
     pub estimated_price: f64,
     pub status: String,
-    pub created_at: Option<DateTime<Utc>>,
-    pub updated_at: Option<DateTime<Utc>>,
+    pub created_at: Option<chrono::NaiveDateTime>,
+    pub updated_at: Option<chrono::NaiveDateTime>,
 }
 
 /// POST /api/orders
