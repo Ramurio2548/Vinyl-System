@@ -1,2 +1,2 @@
--- Add slip_url to orders table for payment proof
-ALTER TABLE orders ADD COLUMN slip_url TEXT;
+-- Add slip_url column to orders table for payment verification
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS slip_url TEXT;

@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -43,7 +44,7 @@ export default function ProfilePage() {
                     window.location.href = "/login";
                     return;
                 }
-                const res = await fetch("http://localhost:3001/api/user/profile", {
+                const res = await fetch(`${API_BASE_URL}/api/user/profile", {
                     headers: { "Authorization": `Bearer ${token}` },
                 });
                 if (!res.ok) throw new Error("ไม่สามารถโหลดข้อมูลส่วนตัวได้");
@@ -72,7 +73,7 @@ export default function ProfilePage() {
                 window.location.href = "/login";
                 return;
             }
-            const res = await fetch("http://localhost:3001/api/user/profile", {
+            const res = await fetch(`${API_BASE_URL}/api/user/profile", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

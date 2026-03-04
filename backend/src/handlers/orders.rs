@@ -273,7 +273,8 @@ pub async fn upload_slip(
                  (StatusCode::INTERNAL_SERVER_ERROR, Json(ErrorResponse { error: e.to_string() }))
             })?;
             
-            slip_url = Some(format!("http://localhost:3001/uploads/{}", new_filename));
+            let prefix = std::env::var("UPLOAD_URL_PREFIX").unwrap_or_else(|_| "http://localhost:3001".to_string());
+            slip_url = Some(format!("{}/uploads/{}", prefix.trim_end_matches('/'), new_filename));
             break;
         }
     }

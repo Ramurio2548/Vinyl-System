@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -41,7 +42,7 @@ export default function AdminShowcasePage() {
         setIsLoading(true);
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch("http://localhost:3001/api/admin/showcase", {
+            const res = await fetch(`${API_BASE_URL}/api/admin/showcase", {
                 headers: { "Authorization": `Bearer ${token}` }
             });
             if (res.ok) {
@@ -64,7 +65,7 @@ export default function AdminShowcasePage() {
         setIsActionLoading(true);
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch("http://localhost:3001/api/admin/showcase", {
+            const res = await fetch(`${API_BASE_URL}/api/admin/showcase", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -90,7 +91,7 @@ export default function AdminShowcasePage() {
     const toggleVisibility = async (id: string, currentVisible: boolean) => {
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`http://localhost:3001/api/admin/showcase/${id}`, {
+            const res = await fetch(`${API_BASE_URL}/api/admin/showcase/${id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -108,7 +109,7 @@ export default function AdminShowcasePage() {
         if (!confirm("ยืนยันการลบผลงานนี้?")) return;
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`http://localhost:3001/api/admin/showcase/${id}`, {
+            const res = await fetch(`${API_BASE_URL}/api/admin/showcase/${id}`, {
                 method: "DELETE",
                 headers: { "Authorization": `Bearer ${token}` }
             });
@@ -196,7 +197,7 @@ export default function AdminShowcasePage() {
                                                         const uploadFormData = new FormData();
                                                         uploadFormData.append("file", file);
 
-                                                        const res = await fetch("http://localhost:3001/api/admin/showcase/upload", {
+                                                        const res = await fetch(`${API_BASE_URL}/api/admin/showcase/upload", {
                                                             method: "POST",
                                                             headers: { "Authorization": `Bearer ${token}` },
                                                             body: uploadFormData

@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -27,7 +28,7 @@ export default function ShowcasePage() {
 
         const fetchShowcase = async () => {
             try {
-                const res = await fetch("http://localhost:3001/api/showcase");
+                const res = await fetch(`${API_BASE_URL}/api/showcase");
                 if (res.ok) {
                     const data = await res.json();
                     setItems(data);

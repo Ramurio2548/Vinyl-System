@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
@@ -57,7 +58,7 @@ export default function DashboardPage() {
             if (!token) return;
 
             // Fetch Orders
-            const ordersRes = await fetch("http://localhost:3001/api/orders", {
+            const ordersRes = await fetch(`${API_BASE_URL}/api/orders", {
                 headers: { "Authorization": `Bearer ${token}` }
             });
 
@@ -81,7 +82,7 @@ export default function DashboardPage() {
     const updateOrderStatus = async (orderId: string, newStatus: string) => {
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`http://localhost:3001/api/orders/${orderId}/status`, {
+            const res = await fetch(`${API_BASE_URL}/api/orders/${orderId}/status`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -104,7 +105,7 @@ export default function DashboardPage() {
     const handleDownload = async (orderId: string) => {
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`http://localhost:3001/api/admin/orders/${orderId}/download`, {
+            const res = await fetch(`${API_BASE_URL}/api/admin/orders/${orderId}/download`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }

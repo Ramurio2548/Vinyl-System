@@ -1,6 +1,5 @@
 use axum::{routing::post, Router};
-use sqlx::sqlite::{SqlitePoolOptions, SqliteConnectOptions, SqlitePool};
-use std::str::FromStr;
+use sqlx::postgres::{PgPoolOptions, PgPool};
 use std::env;
 use tokio::net::TcpListener;
 use tower_http::cors::{Any, CorsLayer};
@@ -9,7 +8,7 @@ use aws_sdk_s3::Client as S3Client;
 
 #[derive(Clone)]
 pub struct AppState {
-    pub db: SqlitePool,
+    pub db: PgPool,
     pub s3: S3Client,
 }
 
@@ -26,18 +25,14 @@ async fn main() {
     });
 
     let database_url = env::var("DATABASE_URL")
-        .unwrap_or_else(|_| "sqlite://vinyl.db".to_string()); // Default to local sqlite file
+        .expect("DATABASE_URL must be set for PostgreSQL connection");
 
-    let connection_options = SqliteConnectOptions::from_str(&database_url)
-        .unwrap()
-        .create_if_missing(true);
-
-    let pool = SqlitePoolOptions::new()
+    let pool = PgPoolOptions::new()
         .max_connections(5)
-        .connect_with(connection_options)
+        .connect(&database_url)
         .await
         .unwrap_or_else(|err| {
-            println!("Failed to connect to database. Make sure you have a valid SQLite URL. Error: {}", err);
+            println!("Failed to connect to database. Make sure you have a valid PostgreSQL URL. Error: {}", err);
             panic!("DB connection error: {}", err);
         });
 
@@ -128,12 +123,13 @@ async fn main() {
         .layer(cors)
         .with_state(state);
 
-    let addr = "0.0.0.0:3001";
-    let listener = match TcpListener::bind(addr).await {
+    let port = env::var("PORT").unwrap_or_else(|_| "3001".to_string());
+    let addr = format!("0.0.0.0:{}", port);
+    
+    let listener = match TcpListener::bind(&addr).await {
         Ok(l) => l,
         Err(e) => {
             eprintln!("❌ FATAL ERROR: Could not bind to {} - {}", addr, e);
-            eprintln!("💡 TIP: Check if another instance of the backend is already running on port 3001.");
             return;
         }
     };

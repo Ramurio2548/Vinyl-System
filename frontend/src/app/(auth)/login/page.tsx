@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -34,7 +35,7 @@ export default function LoginPage() {
         setError(null);
 
         try {
-            const res = await fetch("http://localhost:3001/api/login", {
+            const res = await fetch(`${API_BASE_URL}/api/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

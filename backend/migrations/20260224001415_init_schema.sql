@@ -2,11 +2,11 @@
 CREATE TABLE IF NOT EXISTS inventory (
     id TEXT PRIMARY KEY,
     material_type TEXT NOT NULL,
-    base_price_per_sqm REAL NOT NULL,
-    stock_quantity REAL NOT NULL DEFAULT 0.0,
-    is_active BOOLEAN NOT NULL DEFAULT 1,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    base_price_per_sqm DOUBLE PRECISION NOT NULL,
+    stock_quantity DOUBLE PRECISION NOT NULL DEFAULT 0.0,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Insert initial data into inventory
@@ -22,12 +22,12 @@ CREATE TABLE IF NOT EXISTS orders (
     id TEXT PRIMARY KEY,
     customer_id TEXT, -- For future customers table connection
     material_id TEXT NOT NULL REFERENCES inventory(id) ON DELETE CASCADE,
-    width_m REAL NOT NULL,
-    height_m REAL NOT NULL,
-    total_sqm REAL NOT NULL,
+    width_m DOUBLE PRECISION NOT NULL,
+    height_m DOUBLE PRECISION NOT NULL,
+    total_sqm DOUBLE PRECISION NOT NULL,
     file_url TEXT,
-    estimated_price REAL NOT NULL,
+    estimated_price DOUBLE PRECISION NOT NULL,
     status TEXT NOT NULL DEFAULT 'Pending_Payment',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

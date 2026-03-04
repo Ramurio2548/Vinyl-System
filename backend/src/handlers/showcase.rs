@@ -49,7 +49,7 @@ pub async fn list_showcase(
         r#"
         SELECT id, title, description, image_url, category, example_price, is_visible, created_at, updated_at
         FROM showcase
-        WHERE is_visible = 1
+        WHERE is_visible = TRUE
         ORDER BY created_at DESC
         "#,
     )
@@ -220,7 +220,8 @@ pub async fn upload_showcase_image(
                  (StatusCode::INTERNAL_SERVER_ERROR, Json(ErrorResponse { error: e.to_string() }))
             })?;
             
-            image_url = Some(format!("http://localhost:3001/uploads/{}", new_filename));
+            let prefix = std::env::var("UPLOAD_URL_PREFIX").unwrap_or_else(|_| "http://localhost:3001".to_string());
+            image_url = Some(format!("{}/uploads/{}", prefix.trim_end_matches('/'), new_filename));
             break;
         }
     }

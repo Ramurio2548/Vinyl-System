@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
@@ -45,7 +46,7 @@ export default function AnalyticsPage() {
             const token = localStorage.getItem("token");
             if (!token) return;
 
-            const res = await fetch("http://localhost:3001/api/admin/analytics/summary", {
+            const res = await fetch(`${API_BASE_URL}/api/admin/analytics/summary", {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }

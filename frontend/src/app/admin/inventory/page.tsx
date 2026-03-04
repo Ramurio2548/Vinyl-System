@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -52,7 +53,7 @@ export default function InventoryPage() {
             const token = localStorage.getItem("token");
             if (!token) return;
 
-            const res = await fetch("http://localhost:3001/api/admin/inventory", {
+            const res = await fetch(`${API_BASE_URL}/api/admin/inventory", {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
@@ -90,7 +91,7 @@ export default function InventoryPage() {
                 is_active: editActive,
             };
 
-            const res = await fetch(`http://localhost:3001/api/inventory/${editingItem.id}`, {
+            const res = await fetch(`${API_BASE_URL}/api/inventory/${editingItem.id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -118,7 +119,7 @@ export default function InventoryPage() {
                 is_active: newActive,
             };
 
-            const res = await fetch(`http://localhost:3001/api/inventory`, {
+            const res = await fetch(`${API_BASE_URL}/api/inventory`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

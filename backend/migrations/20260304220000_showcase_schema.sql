@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS showcase (
     description TEXT,
     image_url TEXT NOT NULL,
     category TEXT,
-    example_price REAL,
-    is_visible BOOLEAN NOT NULL DEFAULT 1,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    example_price DOUBLE PRECISION,
+    is_visible BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

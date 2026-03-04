@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
@@ -62,7 +63,7 @@ export default function CustomerDashboardPage() {
                 return;
             }
 
-            const res = await fetch("http://localhost:3001/api/customer/orders", {
+            const res = await fetch(`${API_BASE_URL}/api/customer/orders", {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
@@ -108,7 +109,7 @@ export default function CustomerDashboardPage() {
                 return;
             }
 
-            const res = await fetch(`http://localhost:3001/api/orders/${orderId}/reorder`, {
+            const res = await fetch(`${API_BASE_URL}/api/orders/${orderId}/reorder`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -143,7 +144,7 @@ export default function CustomerDashboardPage() {
             const formData = new FormData();
             formData.append("file", slipFile);
 
-            const res = await fetch(`http://localhost:3001/api/orders/${uploadOrderId}/slip`, {
+            const res = await fetch(`${API_BASE_URL}/api/orders/${uploadOrderId}/slip`, {
                 method: "PATCH",
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -180,7 +181,7 @@ export default function CustomerDashboardPage() {
             }
 
             // 1. Get Presigned URL - Now sending filename to preserve extension
-            const urlRes = await fetch(`http://localhost:3001/api/orders/${printFileUploadOrderId}/presigned-url?filename=${encodeURIComponent(printFile.name)}`, {
+            const urlRes = await fetch(`${API_BASE_URL}/api/orders/${printFileUploadOrderId}/presigned-url?filename=${encodeURIComponent(printFile.name)}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
@@ -209,7 +210,7 @@ export default function CustomerDashboardPage() {
             }
 
             // 3. Notify backend about the new file_url
-            const updateRes = await fetch(`http://localhost:3001/api/orders/${printFileUploadOrderId}/file-url`, {
+            const updateRes = await fetch(`${API_BASE_URL}/api/orders/${printFileUploadOrderId}/file-url`, {
                 method: "PATCH",
                 headers: {
                     "Authorization": `Bearer ${token}`,

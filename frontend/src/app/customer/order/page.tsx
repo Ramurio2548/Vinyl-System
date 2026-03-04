@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useState, useEffect, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
@@ -57,7 +58,7 @@ export default function OrderPage() {
     useEffect(() => {
         const fetchMaterials = async () => {
             try {
-                const res = await fetch("http://localhost:3001/api/inventory");
+                const res = await fetch(`${API_BASE_URL}/api/inventory");
                 if (!res.ok) throw new Error("Failed to fetch materials");
                 const data = await res.json();
                 setMaterials(data);
@@ -79,7 +80,7 @@ export default function OrderPage() {
 
             setIsLoading(true);
             try {
-                const res = await fetch("http://localhost:3001/api/calculator", {
+                const res = await fetch(`${API_BASE_URL}/api/calculator", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ width_m, height_m, material_id }),
@@ -114,7 +115,7 @@ export default function OrderPage() {
             const customerId = tokenPayload.sub;
 
             // 1. Create the Order first
-            const res = await fetch("http://localhost:3001/api/orders", {
+            const res = await fetch(`${API_BASE_URL}/api/orders", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -135,7 +136,7 @@ export default function OrderPage() {
             // 2. If a file is selected, upload it
             if (selectedFile) {
                 // 2.1 Get Presigned URL
-                const urlRes = await fetch(`http://localhost:3001/api/orders/${orderId}/presigned-url?filename=${encodeURIComponent(selectedFile.name)}`, {
+                const urlRes = await fetch(`${API_BASE_URL}/api/orders/${orderId}/presigned-url?filename=${encodeURIComponent(selectedFile.name)}`, {
                     headers: { "Authorization": `Bearer ${token}` }
                 });
 
@@ -152,7 +153,7 @@ export default function OrderPage() {
                 if (!uploadRes.ok) throw new Error("การอัปโหลดไฟล์ล้มเหลว");
 
                 // 2.3 Update order with file_url
-                await fetch(`http://localhost:3001/api/orders/${orderId}/file-url`, {
+                await fetch(`${API_BASE_URL}/api/orders/${orderId}/file-url`, {
                     method: "PATCH",
                     headers: {
                         "Authorization": `Bearer ${token}`,

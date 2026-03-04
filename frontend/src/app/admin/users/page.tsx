@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/api";
 
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
@@ -34,7 +35,7 @@ export default function UsersManagementPage() {
             const token = localStorage.getItem("token");
             if (!token) return;
 
-            const res = await fetch("http://localhost:3001/api/admin/users", {
+            const res = await fetch(`${API_BASE_URL}/api/admin/users", {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
@@ -56,7 +57,7 @@ export default function UsersManagementPage() {
     const updateUserRole = async (userId: string, newRole: string) => {
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`http://localhost:3001/api/admin/users/${userId}/role`, {
+            const res = await fetch(`${API_BASE_URL}/api/admin/users/${userId}/role`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
