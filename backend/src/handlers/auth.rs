@@ -49,7 +49,7 @@ pub struct UserDetail {
     pub id: String,
     pub username: String,
     pub role: String,
-    pub created_at: Option<String>,
+    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
 }
 
 #[derive(Deserialize)]
