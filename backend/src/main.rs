@@ -27,14 +27,30 @@ async fn main() {
     let database_url = env::var("DATABASE_URL")
         .expect("DATABASE_URL must be set for PostgreSQL connection");
 
-    let pool = PgPoolOptions::new()
-        .max_connections(5)
-        .connect(&database_url)
-        .await
-        .unwrap_or_else(|err| {
-            println!("Failed to connect to database. Make sure you have a valid PostgreSQL URL. Error: {}", err);
-            panic!("DB connection error: {}", err);
-        });
+    let mut pool = None;
+    let mut retries = 5;
+    while retries > 0 {
+        match PgPoolOptions::new()
+            .max_connections(5)
+            .acquire_timeout(std::time::Duration::from_secs(5))
+            .connect(&database_url)
+            .await {
+                Ok(p) => {
+                    pool = Some(p);
+                    println!("✅ Successfully connected to PostgreSQL");
+                    break;
+                }
+                Err(err) => {
+                    retries -= 1;
+                    println!("⚠️ Failed to connect to database ({} retries left): {}", retries, err);
+                    if retries > 0 {
+                        tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+                    }
+                }
+            }
+    }
+
+    let pool = pool.expect("❌ Failed to connect to database after several retries");
 
     println!("Running database migrations...");
     sqlx::migrate!("./migrations")
@@ -112,6 +128,7 @@ async fn main() {
         .route_layer(axum::middleware::from_fn(handlers::middleware::auth_middleware));
 
     let app = Router::new()
+        .route("/health", axum::routing::get(|| async { "OK" }))
         .route("/api/calculator", post(handlers::calculator::calculate_price))
         .route("/api/orders", post(handlers::orders::create_order)) // Customers can currently create without auth
         .route("/api/login", post(handlers::auth::login))

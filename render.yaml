@@ -6,7 +6,7 @@ services:
     dockerContext: .
     dockerfilePath: backend/Dockerfile
     plan: free
-    healthCheckPath: /api/inventory # Simple public GET route
+    healthCheckPath: /health # Simple health check route
     envVars:
       - key: DATABASE_URL
         fromDatabase:
