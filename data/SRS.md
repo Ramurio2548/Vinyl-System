@@ -26,13 +26,6 @@
   * สามารถอัปเดตสถานะการสั่งซื้อ (รับงาน, กำลังผลิต, เสร็จสิ้น, จัดส่ง)
   * สามารถตรวจสอบประวัติลูกค้าเพื่อทำโปรโมชั่น (CRM) และดูรายงานยอดขาย/สถิติ
   * ไม่ต้องตอบคำถามราคาซ้ำซาก ลดปัญหาการจัดการคิวงานด้วยระบบที่ชัดเจน
-
-### 2.3 ช่างพิมพ์ (Operator)
-* **ลักษณะผู้ใช้:** ทีมผู้ผลิตหน้าเครื่องพิมพ์
-* **สิทธิ์และคุณลักษณะ:**
-  * ดูคิวงานที่ได้รับอนุมัติแล้ว พร้อมดึงไฟล์ภาพจากระบบไปผลิต
-  * อัปเดตสถานะงานเมื่อสั่งพิมพ์เรียบร้อย เพื่อให้ระบบแจ้งเตือนไปยังพนักงานและลูกค้า
-
 ---
 
 ## 3. Functional Requirements (FR)
@@ -60,7 +53,7 @@
 
 ### FR-004: ระบบติดตามสถานะการผลิต (Order Tracking Dashboard)
 * **Input:** การเปลี่ยนสถานะโดยพนักงานหรือช่างพิมพ์
-* **Processing:** ระบบอัปเดตสถานะในฐานข้อมูลและส่งแจ้งเตือน (Notification / Line OA) ถึงลูกค้า
+* **Processing:** ระบบอัปเดตสถานะในฐานข้อมูลและส่งแจ้งเตือน (Notification) ถึงลูกค้า
 * **Output:** หน้า Dashboard ของลูกค้าแสดงสถานะ เช่น "รอยืนยัน", "กำลังพิมพ์", "พร้อมส่ง"
 * **Acceptance Criteria:**
   * Given ออเดอร์อยู่ในสถานะกำลังผลิต When ช่างพิมพ์กดปรับเป็น "เสร็จสิ้น" Then Dashboard ลูกค้าจะเปลี่ยนสถานะเป็นสร้างเสร็จแล้วทันที
@@ -113,12 +106,12 @@
 *   S3/R2 Integration (Presigned URL for heavy print files)
 *   Slip Upload Integration
 
-### Phase 3: Dashboard & Order Tracking (In-Progress)
+### Phase 3: Dashboard & Order Tracking (Completed)
 *   Customer Dashboard (Filter by status: All, Pending, Production, Finished)
 *   Admin Dashboard (Order Management Table)
 *   One-click Re-order system
 
-### Phase 4: Admin Management (Current Focus)
+### Phase 4: Admin Management (Completed)
 *   Inventory Management (Update Materials, Change Square Meter Prices)
 *   User Management (Manage Roles & Staff)
 

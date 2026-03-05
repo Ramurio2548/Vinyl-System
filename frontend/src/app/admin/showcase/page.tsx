@@ -144,130 +144,133 @@ export default function AdminShowcasePage() {
                             เพิ่มผลงานใหม่
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-md rounded-[2rem] border-none shadow-2xl p-8">
-                        <DialogHeader>
+                    <DialogContent className="max-w-md max-h-[90vh] flex flex-col p-0 overflow-hidden rounded-[2rem] border-none shadow-2xl">
+                        <DialogHeader className="p-8 pb-2">
                             <DialogTitle className="text-2xl font-black">เพิ่มผลงานเข้า Gallery</DialogTitle>
                             <DialogDescription className="font-medium text-slate-500">กรอกรายละเอียดผลงานเพื่อจัดแสดงบนเว็บไซต์</DialogDescription>
                         </DialogHeader>
-                        <form onSubmit={handleCreate} className="space-y-5 py-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="title" className="font-bold text-slate-700">ชื่อผลงาน</Label>
-                                <Input
-                                    id="title"
-                                    placeholder="เช่น ป้ายร้านกาแฟมินิมอล"
-                                    className="rounded-xl h-11 border-slate-200"
-                                    value={formData.title}
-                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Label className="font-bold text-slate-700">รูปภาพผลงาน</Label>
-                                <div className="flex flex-col gap-4">
-                                    {formData.image_url ? (
-                                        <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-slate-200 group">
-                                            <img src={formData.image_url} alt="Preview" className="w-full h-full object-cover" />
-                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                <Button
-                                                    type="button"
-                                                    variant="destructive"
-                                                    size="sm"
-                                                    className="rounded-xl font-bold"
-                                                    onClick={() => setFormData({ ...formData, image_url: "" })}
-                                                >
-                                                    <Trash2 className="w-4 h-4 mr-2" />
-                                                    ลบรูปและเลือกใหม่
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div className="relative group">
-                                            <input
-                                                type="file"
-                                                id="file-upload"
-                                                className="hidden"
-                                                accept="image/*"
-                                                onChange={async (e) => {
-                                                    const file = e.target.files?.[0];
-                                                    if (!file) return;
 
-                                                    setIsActionLoading(true);
-                                                    try {
-                                                        const token = localStorage.getItem("token");
-                                                        const uploadFormData = new FormData();
-                                                        uploadFormData.append("file", file);
-
-                                                        const res = await fetch(`${API_BASE_URL}/api/admin/showcase/upload`, {
-                                                            method: "POST",
-                                                            headers: { "Authorization": `Bearer ${token}` },
-                                                            body: uploadFormData
-                                                        });
-
-                                                        if (res.ok) {
-                                                            const { url } = await res.json();
-                                                            setFormData({ ...formData, image_url: url });
-                                                        }
-                                                    } catch (err) {
-                                                        console.error("Upload failed:", err);
-                                                    } finally {
-                                                        setIsActionLoading(false);
-                                                    }
-                                                }}
-                                            />
-                                            <label
-                                                htmlFor="file-upload"
-                                                className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-200 rounded-2xl cursor-pointer bg-slate-50/50 hover:bg-slate-50 hover:border-primary/50 transition-all group"
-                                            >
-                                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                                    <div className="p-3 bg-white rounded-xl shadow-sm mb-3 group-hover:scale-110 transition-transform">
-                                                        <Plus className="w-6 h-6 text-slate-400" />
-                                                    </div>
-                                                    <p className="mb-1 text-sm text-slate-600 font-bold">คลิกเพื่ออัปโหลดรูปภาพ</p>
-                                                    <p className="text-xs text-slate-400 font-medium">PNG, JPG หรือ GIF</p>
+                        <form onSubmit={handleCreate} className="flex-1 flex flex-col overflow-hidden">
+                            <div className="flex-1 overflow-y-auto px-8 py-4 space-y-5">
+                                <div className="space-y-2">
+                                    <Label htmlFor="title" className="font-bold text-slate-700">ชื่อผลงาน</Label>
+                                    <Input
+                                        id="title"
+                                        placeholder="เช่น ป้ายร้านกาแฟมินิมอล"
+                                        className="rounded-xl h-11 border-slate-200"
+                                        value={formData.title}
+                                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label className="font-bold text-slate-700">รูปภาพผลงาน</Label>
+                                    <div className="flex flex-col gap-4">
+                                        {formData.image_url ? (
+                                            <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-slate-200 group">
+                                                <img src={formData.image_url} alt="Preview" className="w-full h-full object-cover" />
+                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                    <Button
+                                                        type="button"
+                                                        variant="destructive"
+                                                        size="sm"
+                                                        className="rounded-xl font-bold"
+                                                        onClick={() => setFormData({ ...formData, image_url: "" })}
+                                                    >
+                                                        <Trash2 className="w-4 h-4 mr-2" />
+                                                        ลบรูปและเลือกใหม่
+                                                    </Button>
                                                 </div>
-                                            </label>
-                                        </div>
-                                    )}
+                                            </div>
+                                        ) : (
+                                            <div className="relative group">
+                                                <input
+                                                    type="file"
+                                                    id="file-upload"
+                                                    className="hidden"
+                                                    accept="image/*"
+                                                    onChange={async (e) => {
+                                                        const file = e.target.files?.[0];
+                                                        if (!file) return;
+
+                                                        setIsActionLoading(true);
+                                                        try {
+                                                            const token = localStorage.getItem("token");
+                                                            const uploadFormData = new FormData();
+                                                            uploadFormData.append("file", file);
+
+                                                            const res = await fetch(`${API_BASE_URL}/api/admin/showcase/upload`, {
+                                                                method: "POST",
+                                                                headers: { "Authorization": `Bearer ${token}` },
+                                                                body: uploadFormData
+                                                            });
+
+                                                            if (res.ok) {
+                                                                const { url } = await res.json();
+                                                                setFormData({ ...formData, image_url: url });
+                                                            }
+                                                        } catch (err) {
+                                                            console.error("Upload failed:", err);
+                                                        } finally {
+                                                            setIsActionLoading(false);
+                                                        }
+                                                    }}
+                                                />
+                                                <label
+                                                    htmlFor="file-upload"
+                                                    className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-200 rounded-2xl cursor-pointer bg-slate-50/50 hover:bg-slate-50 hover:border-primary/50 transition-all group"
+                                                >
+                                                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                                        <div className="p-3 bg-white rounded-xl shadow-sm mb-3 group-hover:scale-110 transition-transform">
+                                                            <Plus className="w-6 h-6 text-slate-400" />
+                                                        </div>
+                                                        <p className="mb-1 text-sm text-slate-600 font-bold">คลิกเพื่ออัปโหลดรูปภาพ</p>
+                                                        <p className="text-xs text-slate-400 font-medium">PNG, JPG หรือ GIF</p>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="category" className="font-bold text-slate-700">หมวดหมู่</Label>
+                                        <Input
+                                            id="category"
+                                            placeholder="Banner / Sticker"
+                                            className="rounded-xl h-11 border-slate-200"
+                                            value={formData.category}
+                                            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="price" className="font-bold text-slate-700">ราคาตัวอย่าง (฿)</Label>
+                                        <Input
+                                            id="price"
+                                            type="number"
+                                            placeholder="150"
+                                            className="rounded-xl h-11 border-slate-200"
+                                            value={formData.example_price}
+                                            onChange={(e) => setFormData({ ...formData, example_price: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="category" className="font-bold text-slate-700">หมวดหมู่</Label>
-                                    <Input
-                                        id="category"
-                                        placeholder="Banner / Sticker"
-                                        className="rounded-xl h-11 border-slate-200"
-                                        value={formData.category}
-                                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                                    <Label htmlFor="desc" className="font-bold text-slate-700">คำอธิบาย</Label>
+                                    <Textarea
+                                        id="desc"
+                                        placeholder="อธิบายรายละเอียดผลงาน..."
+                                        className="rounded-xl min-h-[100px] border-slate-200"
+                                        value={formData.description}
+                                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="price" className="font-bold text-slate-700">ราคาตัวอย่าง (฿)</Label>
-                                    <Input
-                                        id="price"
-                                        type="number"
-                                        placeholder="150"
-                                        className="rounded-xl h-11 border-slate-200"
-                                        value={formData.example_price}
-                                        onChange={(e) => setFormData({ ...formData, example_price: e.target.value })}
-                                    />
-                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="desc" className="font-bold text-slate-700">คำอธิบาย</Label>
-                                <Textarea
-                                    id="desc"
-                                    placeholder="อธิบายรายละเอียดผลงาน..."
-                                    className="rounded-xl min-h-[100px] border-slate-200"
-                                    value={formData.description}
-                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                />
-                            </div>
-                            <DialogFooter className="pt-4">
-                                <Button type="submit" disabled={isActionLoading || !formData.image_url} className="w-full rounded-xl h-12 font-black">
+                            <div className="p-8 pt-0 mt-2 bg-white/80 backdrop-blur-sm">
+                                <Button type="submit" disabled={isActionLoading || !formData.image_url} className="w-full rounded-xl h-12 font-black shadow-lg shadow-primary/10">
                                     {isActionLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "บันทึกและแสดงผล"}
                                 </Button>
-                            </DialogFooter>
+                            </div>
                         </form>
                     </DialogContent>
                 </Dialog>

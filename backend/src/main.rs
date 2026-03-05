@@ -53,7 +53,7 @@ async fn main() {
     let pool = pool.expect("❌ Failed to connect to database after several retries");
 
     println!("Cleaning up modified migration...");
-    let _ = sqlx::query("DELETE FROM _sqlx_migrations WHERE version = 20260304220000")
+    let _ = sqlx::query("DELETE FROM _sqlx_migrations WHERE version IN (20260304220000, 20260305000000)")
         .execute(&pool)
         .await;
 
@@ -120,8 +120,7 @@ async fn main() {
         .route("/api/admin/inventory", axum::routing::get(handlers::inventory::list_all_inventory))
         .route("/api/inventory", axum::routing::post(handlers::inventory::create_inventory))
         .route("/api/inventory/:id", axum::routing::patch(handlers::inventory::update_inventory))
-        .route("/api/user/profile", axum::routing::get(handlers::profile::get_profile))
-        .route("/api/user/profile", axum::routing::put(handlers::profile::update_profile))
+        .route("/api/user/profile", axum::routing::get(handlers::profile::get_profile).put(handlers::profile::update_profile))
         .route("/api/admin/users", axum::routing::get(handlers::auth::list_users))
         .route("/api/admin/users/:id/role", axum::routing::patch(handlers::auth::update_user_role))
         .route("/api/admin/analytics/summary", axum::routing::get(handlers::analytics::get_analytics_summary))

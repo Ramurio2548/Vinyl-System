@@ -44,7 +44,9 @@ export default function CustomerDashboardPage() {
     // Slip Upload State
     const [isUploadOpen, setIsUploadOpen] = useState(false);
     const [uploadOrderId, setUploadOrderId] = useState<string | null>(null);
+    const [orderToUpload, setOrderToUpload] = useState<Order | null>(null);
     const [slipFile, setSlipFile] = useState<File | null>(null);
+    const [slipPreviewUrl, setSlipPreviewUrl] = useState<string | null>(null);
     const [isUploading, setIsUploading] = useState(false);
 
     // Print File Upload State
@@ -160,6 +162,10 @@ export default function CustomerDashboardPage() {
             alert("อัปโหลดสลิปสำเร็จ! รอการตรวจสอบจากทีมงาน");
             setIsUploadOpen(false);
             setSlipFile(null);
+            if (slipPreviewUrl) {
+                URL.revokeObjectURL(slipPreviewUrl);
+                setSlipPreviewUrl(null);
+            }
             fetchOrders(); // Refresh table to show new status
         } catch (err: any) {
             setError(err.message);
@@ -371,7 +377,7 @@ export default function CustomerDashboardPage() {
                                             </TableCell>
                                             <TableCell className="text-center">
                                                 {order.slip_url ? (
-                                                    <a href={order.slip_url} target="_blank" rel="noreferrer" className="text-primary-foreground bg-accent/20 hover:bg-accent/30 p-2 rounded-xl inline-flex items-center transition-colors">
+                                                    <a href={order.slip_url.startsWith('http://localhost') ? order.slip_url.replace('http://localhost:3001', API_BASE_URL) : order.slip_url} target="_blank" rel="noreferrer" className="text-primary-foreground bg-accent/20 hover:bg-accent/30 p-2 rounded-xl inline-flex items-center transition-colors">
                                                         <ExternalLink className="w-4 h-4" />
                                                     </a>
                                                 ) : <span className="text-muted-foreground text-xs">—</span>}
@@ -387,6 +393,7 @@ export default function CustomerDashboardPage() {
                                                         className="w-[120px] bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl shadow-lg shadow-primary/10 border-none font-bold text-xs h-9"
                                                         onClick={() => {
                                                             setUploadOrderId(order.id);
+                                                            setOrderToUpload(order);
                                                             setIsUploadOpen(true);
                                                         }}
                                                     >
@@ -415,31 +422,88 @@ export default function CustomerDashboardPage() {
             </Card>
 
             <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>อัปโหลดสลิปโอนเงิน</DialogTitle>
+                <DialogContent className="max-w-md max-h-[90vh] flex flex-col p-0 overflow-hidden rounded-3xl border-none shadow-2xl">
+                    <DialogHeader className="p-6 pb-2 text-left">
+                        <DialogTitle className="text-xl font-bold">แจ้งชำระเงิน</DialogTitle>
                         <DialogDescription>
-                            กรุณาแนบรูปภาพสลิปโอนเงิน สำหรับออเดอร์ #{uploadOrderId?.split('-')[0]}
+                            กรุณาโอนเงินตามยอดที่ระบุและแนบหลักฐานการโอนเงิน (สลิป)
                         </DialogDescription>
                     </DialogHeader>
-                    <div className="space-y-4 py-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="slipFile">รูปภาพสลิป</Label>
-                            <Input
-                                id="slipFile"
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => {
-                                    if (e.target.files && e.target.files[0]) {
-                                        setSlipFile(e.target.files[0]);
-                                    }
-                                }}
-                            />
+
+                    <div className="flex-1 overflow-y-auto px-6 py-2 space-y-6">
+                        {/* Payment Target Section */}
+                        <div className="bg-primary/5 rounded-2xl p-4 border border-primary/10 space-y-3">
+                            <div className="flex justify-between items-center">
+                                <span className="text-sm font-medium text-muted-foreground">ยอดเงินที่ต้องโอน:</span>
+                                <span className="text-2xl font-black text-primary">
+                                    ฿{orderToUpload?.estimated_price.toLocaleString()}
+                                </span>
+                            </div>
+                            <div className="text-[10px] text-center text-muted-foreground bg-white/50 py-1 rounded-md">
+                                รหัสอ้างอิง: {orderToUpload?.id.split('-')[0]}
+                            </div>
+                        </div>
+
+                        {/* QR Code Section */}
+                        <div className="flex flex-col items-center space-y-3">
+                            <div className="w-56 h-auto bg-white p-3 rounded-2xl shadow-sm border border-border overflow-hidden">
+                                <img
+                                    src="/payment-qr.png"
+                                    alt="Payment QR Code"
+                                    className="w-full h-auto rounded-lg"
+                                />
+                            </div>
+                            <div className="text-center space-y-1">
+                                <p className="text-sm font-bold">นาย นครินทร์ โสมขุนทด</p>
+                                <p className="text-xs text-muted-foreground">พร้อมเพย์ สแกนจ่ายได้ทุกธนาคาร</p>
+                            </div>
+                        </div>
+
+                        <div className="relative border-t pt-4">
+                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-2 bg-background text-[10px] uppercase tracking-widest text-muted-foreground font-bold">
+                                อัปโหลดไฟล์สลิป
+                            </div>
+                        </div>
+
+                        <div className="space-y-4 pb-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="slipFile" className="text-sm font-bold">รูปภาพสลิปโอนเงิน</Label>
+                                <Input
+                                    id="slipFile"
+                                    type="file"
+                                    accept="image/*"
+                                    className="cursor-pointer rounded-xl border-dashed py-2"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                            setSlipFile(file);
+                                            // Create preview URL
+                                            if (slipPreviewUrl) URL.revokeObjectURL(slipPreviewUrl);
+                                            const url = URL.createObjectURL(file);
+                                            setSlipPreviewUrl(url);
+                                        }
+                                    }}
+                                />
+                            </div>
+
+                            {slipPreviewUrl && (
+                                <div className="space-y-2">
+                                    <Label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">ตัวอย่างรูปภาพที่เลือก</Label>
+                                    <div className="relative aspect-[3/4] max-h-[300px] w-full overflow-hidden rounded-2xl border border-border shadow-inner bg-gray-50 flex items-center justify-center">
+                                        <img
+                                            src={slipPreviewUrl}
+                                            alt="Slip Preview"
+                                            className="h-full w-full object-contain p-2"
+                                        />
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
-                    <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsUploadOpen(false)} disabled={isUploading}>ยกเลิก</Button>
-                        <Button onClick={handleUploadSlip} disabled={!slipFile || isUploading} className="bg-green-600 hover:bg-green-700">
+
+                    <DialogFooter className="p-6 pt-4 border-t bg-gray-50/50 flex flex-row gap-3">
+                        <Button variant="outline" onClick={() => setIsUploadOpen(false)} disabled={isUploading} className="flex-1 rounded-xl">ยกเลิก</Button>
+                        <Button onClick={handleUploadSlip} disabled={!slipFile || isUploading} className="flex-1 bg-green-600 hover:bg-green-700 rounded-xl font-bold shadow-lg shadow-green-600/10">
                             {isUploading ? "กำลังบันทึก..." : "ยืนยันการโอนเงิน"}
                         </Button>
                     </DialogFooter>
@@ -481,6 +545,6 @@ export default function CustomerDashboardPage() {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-        </div>
+        </div >
     );
 }

@@ -8,7 +8,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw, Eye, ExternalLink } from "lucide-react";
-import { PUBLIC_FILE_URL } from "@/lib/api";
 
 import {
     Select,
@@ -332,23 +331,7 @@ export default function DashboardPage() {
                                                                     <Label className="text-right text-gray-500">สลิปโอนเงิน</Label>
                                                                     <span className="col-span-3 text-sm text-green-600 break-all">
                                                                         {selectedOrder?.slip_url ? (
-                                                                            <a 
-                                                                                href={
-                                                                                    // 1. ถ้ามีคำว่า localhost ให้ตัดทิ้งแล้วเอาชื่อไฟล์ไปต่อกับ R2 URL
-                                                                                    selectedOrder?.slip_url?.includes('localhost') 
-                                                                                    ? `${PUBLIC_FILE_URL}/${selectedOrder.slip_url.split('/').pop()}`
-                                                                                    
-                                                                                    // 2. ถ้าเป็น URL เต็มอยู่แล้ว (เช่น ออเดอร์ใหม่) ให้ใช้ได้เลย
-                                                                                    : selectedOrder?.slip_url?.startsWith('http')
-                                                                                    ? selectedOrder.slip_url
-                                                                                        
-                                                                                    // 3. ถ้าเป็นแค่ชื่อไฟล์เฉยๆ ให้ต่อกับ R2 URL
-                                                                                    : `${PUBLIC_FILE_URL}/${selectedOrder?.slip_url}`
-                                                                                }
-                                                                                target="_blank" 
-                                                                                rel="noreferrer" 
-                                                                                className="underline inline-flex items-center"
-                                                                            >
+                                                                            <a href={selectedOrder.slip_url.startsWith('http://localhost') ? selectedOrder.slip_url.replace('http://localhost:3001', API_BASE_URL) : selectedOrder.slip_url} target="_blank" rel="noreferrer" className="underline inline-flex items-center">
                                                                                 ดูสลิป <ExternalLink className="ml-1 w-3 h-3" />
                                                                             </a>
                                                                         ) : <span className="text-gray-400">ยังไม่ได้อัปโหลด</span>}
