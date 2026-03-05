@@ -193,6 +193,7 @@ pub struct UploadResponse {
 
 /// POST /api/admin/showcase/upload
 pub async fn upload_showcase_image(
+    State(state): State<crate::AppState>,
     mut multipart: Multipart,
 ) -> Result<Json<UploadResponse>, (StatusCode, Json<ErrorResponse>)> {
     let mut image_url = None;
@@ -206,22 +207,40 @@ pub async fn upload_showcase_image(
                 .and_then(std::ffi::OsStr::to_str)
                 .unwrap_or("jpg");
             let new_filename = format!("showcase_{}.{}", Uuid::new_v4(), ext);
-            let path = format!("uploads/{}", new_filename);
             
             let data = field.bytes().await.map_err(|e| {
-                (StatusCode::INTERNAL_SERVER_ERROR, Json(ErrorResponse { error: e.to_string() }))
+                (StatusCode::INTERNAL_SERVER_ERROR, Json(ErrorResponse { error: format!("Failed to read file: {}", e) }))
             })?;
             
-            use tokio::io::AsyncWriteExt;
-            let mut file = tokio::fs::File::create(&path).await.map_err(|e| {
-                 (StatusCode::INTERNAL_SERVER_ERROR, Json(ErrorResponse { error: e.to_string() }))
-            })?;
-            file.write_all(&data).await.map_err(|e| {
-                 (StatusCode::INTERNAL_SERVER_ERROR, Json(ErrorResponse { error: e.to_string() }))
-            })?;
+            let bucket_name = std::env::var("S3_BUCKET_NAME").unwrap_or_else(|_| "vinyl-system-files".to_string());
+            let public_prefix = std::env::var("PUBLIC_FILE_URL_PREFIX").unwrap_or_else(|_| "".to_string());
             
-            let prefix = std::env::var("UPLOAD_URL_PREFIX").unwrap_or_else(|_| "http://localhost:3001".to_string());
-            image_url = Some(format!("{}/uploads/{}", prefix.trim_end_matches('/'), new_filename));
+            // Determine content type
+            let content_type = match ext.to_lowercase().as_str() {
+                "png" => "image/png",
+                "gif" => "image/gif",
+                "webp" => "image/webp",
+                "svg" => "image/svg+xml",
+                _ => "image/jpeg",
+            };
+
+            // Upload to S3
+            state.s3.put_object()
+                .bucket(&bucket_name)
+                .key(&new_filename)
+                .body(data.into())
+                .content_type(content_type)
+                .send()
+                .await
+                .map_err(|e| {
+                    (StatusCode::INTERNAL_SERVER_ERROR, Json(ErrorResponse { error: format!("Failed to upload to S3: {}", e) }))
+                })?;
+            
+            if public_prefix.is_empty() {
+                 return Err((StatusCode::INTERNAL_SERVER_ERROR, Json(ErrorResponse { error: "PUBLIC_FILE_URL_PREFIX not configured".into() })));
+            }
+
+            image_url = Some(format!("{}/{}", public_prefix.trim_end_matches('/'), new_filename));
             break;
         }
     }
