@@ -19,11 +19,6 @@ async fn main() {
     // Load environment variables from .env file
     dotenvy::dotenv().ok();
 
-    // Ensure uploads directory exists
-    tokio::fs::create_dir_all("uploads").await.unwrap_or_else(|err| {
-        println!("Failed to create uploads directory: {}", err);
-    });
-
     let database_url = env::var("DATABASE_URL")
         .expect("DATABASE_URL must be set for PostgreSQL connection");
 
